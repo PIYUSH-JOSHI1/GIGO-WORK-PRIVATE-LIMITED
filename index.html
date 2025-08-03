@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechBlog - Home</title>
+    <title>TechBharat - The Indian Tech Chronicle</title>
     <link rel="stylesheet" href="#" id="main-styles">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         /* CSS Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -52,6 +56,7 @@
             display: flex;
             list-style: none;
             gap: 2rem;
+            align-items: center;
         }
 
         .nav-menu a {
@@ -59,12 +64,15 @@
             text-decoration: none;
             font-weight: 500;
             transition: opacity 0.3s ease;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
         }
 
-        .nav-menu a:hover {
-            opacity: 0.8;
+        .nav-menu a.active-link, .nav-menu a:hover {
+            opacity: 1;
+            border-bottom-color: white;
         }
-
+        
         .hamburger {
             display: none;
             flex-direction: column;
@@ -85,6 +93,9 @@
             margin: 0 auto;
             padding: 2rem;
             min-height: calc(100vh - 200px);
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
 
         .hero-section {
@@ -140,6 +151,8 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-card:hover {
@@ -159,6 +172,9 @@
 
         .blog-content {
             padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .blog-title {
@@ -172,11 +188,35 @@
             font-size: 0.9rem;
             margin-bottom: 1rem;
         }
+        
+        .blog-meta .reading-time {
+            margin-left: 10px;
+        }
+        
+        .blog-tags {
+            margin-bottom: 1rem;
+        }
+
+        .blog-tags .tag {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 0.2rem 0.6rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .blog-tags .tag:hover {
+            background-color: #ced4da;
+        }
 
         .blog-excerpt {
             color: #555;
             line-height: 1.6;
             margin-bottom: 1rem;
+            flex-grow: 1;
         }
 
         .read-more {
@@ -326,7 +366,7 @@
             line-height: 1.8;
         }
 
-        .post-content h2 {
+        .post-content h2, .post-content h3 {
             margin: 2rem 0 1rem 0;
             color: #333;
         }
@@ -334,31 +374,46 @@
         .post-content p {
             margin-bottom: 1.5rem;
         }
+        
+        .post-content code {
+            background-color: #f1f1f1;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+        }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .hamburger {
                 display: flex;
+                z-index: 1001; /* Above mobile menu */
             }
 
             .nav-menu {
                 position: fixed;
                 left: -100%;
-                top: 70px;
+                top: 0;
                 flex-direction: column;
-                background-color: rgba(30, 60, 114, 0.95);
+                background-color: rgba(30, 60, 114, 0.98);
+                backdrop-filter: blur(5px);
                 width: 100%;
+                height: 100vh;
                 text-align: center;
-                transition: 0.3s;
-                padding: 2rem 0;
+                transition: left 0.3s ease-in-out;
+                padding-top: 6rem;
+                gap: 2.5rem;
             }
 
             .nav-menu.active {
                 left: 0;
             }
+            
+            .nav-menu a {
+                font-size: 1.5rem;
+            }
 
             .hero-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
 
             .main-container {
@@ -381,214 +436,107 @@
 
         /* Dark Mode */
         .dark-mode {
-            background-color: #1a1a1a;
+            background-color: #121212;
             color: #e0e0e0;
         }
-
         .dark-mode .page-content,
         .dark-mode .blog-card,
         .dark-mode .hero-section {
-            background-color: #2d2d2d;
+            background-color: #1e1e1e;
             color: #e0e0e0;
+            border-color: #333;
         }
-
         .dark-mode .blog-title,
-        .dark-mode .page-title {
-            color: #e0e0e0;
+        .dark-mode .page-title,
+        .dark-mode .post-content h2,
+        .dark-mode .post-content h3 {
+            color: #f5f5f5;
         }
-
         .dark-mode .header {
             background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%);
         }
-
         .dark-mode .hero-title {
             background: linear-gradient(135deg, #4fa8da 0%, #6bb8e8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .dark-mode .cta-button {
             background: linear-gradient(135deg, #4fa8da 0%, #6bb8e8 100%);
         }
-
         .dark-mode .blog-image,
         .dark-mode .about-image {
             background: linear-gradient(45deg, #4fa8da, #6bb8e8);
         }
-
         .dark-mode .read-more,
         .dark-mode .breadcrumb a {
             color: #4fa8da;
         }
-
         .dark-mode .form-group input,
         .dark-mode .form-group textarea {
             background-color: #3a3a3a;
             border-color: #555;
             color: #e0e0e0;
         }
-
         .dark-mode .form-group input:focus,
         .dark-mode .form-group textarea:focus {
             border-color: #4fa8da;
         }
-
         .dark-mode .search-input {
             background-color: #3a3a3a;
             border-color: #555;
             color: #e0e0e0;
         }
-
-        .dark-mode .search-btn {
+        .dark-mode .search-btn, .dark-mode .category-filter button.active {
             color: #4fa8da;
         }
-
-        /* Blue Theme */
-        .blue-theme {
-            background-color: #f0f4ff;
+        .dark-mode .blog-tags .tag {
+             background-color: #3a3a3a;
+             color: #e0e0e0;
         }
+        .dark-mode .comment { border-color: #444; }
+        .dark-mode .post-content code { background-color: #333; }
 
-        .blue-theme .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        }
-
-        .blue-theme .page-content,
-        .blue-theme .blog-card,
-        .blue-theme .hero-section {
-            background-color: #ffffff;
-            border: 1px solid #e3f2fd;
-        }
 
         /* Green Theme */
         .green-theme {
             background-color: #f0fff4;
         }
-
         .green-theme .header {
             background: linear-gradient(135deg, #2d5a27 0%, #4caf50 100%);
         }
-
+        .green-theme .page-content,
+        .green-theme .blog-card,
+        .green-theme .hero-section {
+            background-color: #ffffff;
+            border: 1px solid #e0f2e1;
+        }
         .green-theme .hero-title {
             background: linear-gradient(135deg, #2d5a27 0%, #4caf50 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .green-theme .cta-button,
         .green-theme .submit-btn {
             background: linear-gradient(135deg, #2d5a27 0%, #4caf50 100%);
         }
-
         .green-theme .blog-image,
         .green-theme .about-image {
             background: linear-gradient(45deg, #2d5a27, #4caf50);
         }
-
         .green-theme .read-more,
         .green-theme .breadcrumb a,
-        .green-theme .search-btn {
+        .green-theme .search-btn,
+        .green-theme .category-filter button.active {
             color: #2d5a27;
         }
-
         .green-theme .form-group input:focus,
         .green-theme .form-group textarea:focus {
             border-color: #2d5a27;
         }
-
-        /* Theme Toggle */
-        .theme-toggle {
-            background: none;
-            border: 2px solid white;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-left: 1rem;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-        }
-
-        .theme-toggle:hover {
-            background: white;
-            color: #1e3c72;
-            transform: scale(1.05);
-        }
-
-        .theme-selector {
-            position: relative;
-            display: inline-block;
-        }
-
-        .theme-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            z-index: 1001;
-            min-width: 150px;
-            margin-top: 5px;
-        }
-
-        .theme-dropdown.show {
-            display: block;
-        }
-
-        .theme-option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-            color: #333;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-        }
-
-        .theme-option:hover {
-            background-color: #f5f5f5;
-        }
-
-        .theme-option:first-child {
-            border-radius: 8px 8px 0 0;
-        }
-
-        .theme-option:last-child {
-            border-radius: 0 0 8px 8px;
-        }
-
-        .theme-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 2px solid #ddd;
-        }
-
-        .theme-color.light {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-        }
-
-        .theme-color.dark {
-            background: linear-gradient(45deg, #0f1419, #1a2332);
-        }
-
-        .theme-color.blue {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-        }
-
-        .theme-color.green {
-            background: linear-gradient(45deg, #2d5a27, #4caf50);
+        .green-theme .blog-tags .tag:hover {
+            background-color: #c8e6c9;
         }
 
         /* Loading Animation */
@@ -597,7 +545,6 @@
             text-align: center;
             padding: 2rem;
         }
-
         .spinner {
             border: 4px solid #f3f3f3;
             border-top: 4px solid #1e3c72;
@@ -607,19 +554,17 @@
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        /* Search */
+        /* Search & Filter */
         .search-container {
             max-width: 500px;
             margin: 2rem auto;
             position: relative;
         }
-
         .search-input {
             width: 100%;
             padding: 1rem;
@@ -628,7 +573,6 @@
             font-size: 1rem;
             padding-right: 3rem;
         }
-
         .search-btn {
             position: absolute;
             right: 10px;
@@ -640,54 +584,119 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
-
         .no-results {
             text-align: center;
             padding: 2rem;
             color: #666;
         }
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .category-filter button {
+            background: none;
+            border: 2px solid #e9ecef;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        .category-filter button:hover, .category-filter button.active {
+            background-color: #1e3c72;
+            color: white;
+            border-color: #1e3c72;
+        }
+        
+        /* Comments Section */
+        .comments-section {
+            margin-top: 3rem;
+            border-top: 1px solid #eee;
+            padding-top: 2rem;
+        }
+        .comment {
+            border-bottom: 1px solid #eee;
+            padding: 1rem 0;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #333;
+        }
+        .dark-mode .comment-author { color: #f5f5f5; }
+        .comment-date {
+            font-size: 0.8rem;
+            color: #888;
+            margin-left: 10px;
+        }
+        .comment-body {
+            margin-top: 0.5rem;
+        }
+
+        /* Social Share */
+        .social-share {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .social-share a {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        .dark-mode .social-share a { color: #e0e0e0; }
+        .social-share a:hover { color: #1e3c72; }
+        .dark-mode .social-share a:hover { color: #4fa8da; }
+
+        /* Back to Top button */
+        #back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            z-index: 999;
+        }
+        #back-to-top.show {
+            display: block;
+            opacity: 0.8;
+            transform: translateY(0);
+        }
+        .dark-mode #back-to-top { background: #4fa8da; }
+        .green-theme #back-to-top { background: #4caf50; }
     </style>
 </head>
 <body>
-    <!-- Header Component -->
     <header class="header">
         <nav class="nav-container">
             <a href="#" class="logo" onclick="loadPage('home')">
-                <i class="fas fa-blog"></i> TechBlog
+                <i class="fas fa-satellite-dish"></i> TechBharat
             </a>
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="#" onclick="loadPage('home')">Home</a></li>
                 <li><a href="#" onclick="loadPage('blog')">Blog</a></li>
                 <li><a href="#" onclick="loadPage('about')">About</a></li>
                 <li><a href="#" onclick="loadPage('contact')">Contact</a></li>
+                <li>
+                    <select id="theme-selector" title="Select Theme" style="background: transparent; color: white; border: 1px solid white; border-radius: 5px; padding: 5px;">
+                        <option value="light" style="color: black;">Light</option>
+                        <option value="dark" style="color: black;">Dark</option>
+                        <option value="green" style="color: black;">Green</option>
+                    </select>
+                </li>
             </ul>
-            <button class="theme-toggle" onclick="toggleTheme()">
-                <i class="fas fa-moon"></i>
-            </button>
-            <div class="theme-selector">
-                <button class="theme-toggle" onclick="toggleThemeDropdown()">
-                    <i class="fas fa-palette"></i>
-                    <span>Themes</span>
-                </button>
-                <div class="theme-dropdown" id="theme-dropdown">
-                    <button class="theme-option" onclick="setTheme('light')">
-                        <div class="theme-color light"></div>
-                        <span>Light Blue</span>
-                    </button>
-                    <button class="theme-option" onclick="setTheme('dark')">
-                        <div class="theme-color dark"></div>
-                        <span>Dark Mode</span>
-                    </button>
-                    <button class="theme-option" onclick="setTheme('blue')">
-                        <div class="theme-color blue"></div>
-                        <span>Ocean Blue</span>
-                    </button>
-                    <button class="theme-option" onclick="setTheme('green')">
-                        <div class="theme-color green"></div>
-                        <span>Nature Green</span>
-                    </button>
-                </div>
-            </div>
             <div class="hamburger" onclick="toggleMenu()">
                 <span></span>
                 <span></span>
@@ -696,876 +705,482 @@
         </nav>
     </header>
 
-    <!-- Loading Animation -->
     <div class="loading" id="loading">
         <div class="spinner"></div>
         <p>Loading...</p>
     </div>
 
-    <!-- Main Content Area -->
-    <main class="main-container" id="main-content">
-        <!-- Home Page Content (Default) -->
-        <div id="home-page">
-            <section class="hero-section">
-                <h1 class="hero-title">Welcome to TechBlog</h1>
-                <p class="hero-subtitle">Discover the latest trends in technology, programming, and digital innovation</p>
-                <a href="#" class="cta-button" onclick="loadPage('blog')">Explore Articles</a>
-            </section>
+    <main class="main-container" id="main-content"></main>
+    
+    <button id="back-to-top" title="Go to top"><i class="fas fa-arrow-up"></i></button>
 
-            <section class="blog-posts" id="featured-posts">
-                <!-- Featured posts will be loaded here -->
-            </section>
-        </div>
-    </main>
-
-    <!-- Footer Component -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; 2025 TechBlog. All rights reserved.</p>
+            <p>&copy; <span id="current-year"></span> TechBharat. All rights reserved.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-linkedin"></i></a>
                 <a href="#"><i class="fab fa-github"></i></a>
                 <a href="#"><i class="fab fa-youtube"></i></a>
             </div>
-            <p>Built with HTML, CSS, and JavaScript</p>
+            <p>Made with ❤️ in India</p>
         </div>
     </footer>
 
     <script>
-        // Blog data storage
-        const blogPosts = [
-            {
-                id: 1,
-                title: "Getting Started with JavaScript ES6",
-                author: "John Doe",
-                date: "2025-01-15",
-                excerpt: "Learn the modern features of JavaScript ES6 including arrow functions, destructuring, and more.",
-                content: `
-                    <h2>Introduction to ES6</h2>
-                    <p>JavaScript ES6 (ECMAScript 2015) introduced many powerful features that make JavaScript development more efficient and enjoyable. In this comprehensive guide, we'll explore the most important features you need to know.</p>
-                    
-                    <h2>Arrow Functions</h2>
-                    <p>Arrow functions provide a more concise way to write functions in JavaScript. They also have lexical 'this' binding, which can be very useful in certain scenarios.</p>
-                    
-                    <h2>Destructuring Assignment</h2>
-                    <p>Destructuring allows you to extract values from arrays or properties from objects into distinct variables. This feature can greatly simplify your code and make it more readable.</p>
-                    
-                    <h2>Template Literals</h2>
-                    <p>Template literals allow for easier string interpolation and multi-line strings. They use backticks instead of quotes and support embedded expressions.</p>
-                    
-                    <h2>Conclusion</h2>
-                    <p>ES6 features have become essential tools for modern JavaScript development. Mastering these concepts will significantly improve your coding efficiency and code quality.</p>
-                `,
-                category: "JavaScript",
-                tags: ["JavaScript", "ES6", "Programming"],
-                image: "💻"
-            },
-            {
-                id: 2,
-                title: "CSS Grid vs Flexbox: When to Use Which",
-                author: "Jane Smith",
-                date: "2025-01-10",
-                excerpt: "A comprehensive comparison of CSS Grid and Flexbox layout systems and when to use each one.",
-                content: `
-                    <h2>Understanding CSS Layout Systems</h2>
-                    <p>CSS Grid and Flexbox are both powerful layout systems, but they serve different purposes and excel in different scenarios. Understanding when to use each is crucial for effective web development.</p>
-                    
-                    <h2>CSS Flexbox</h2>
-                    <p>Flexbox is designed for one-dimensional layouts - either a row or a column. It's perfect for aligning items within a container and distributing space among them.</p>
-                    
-                    <h2>CSS Grid</h2>
-                    <p>CSS Grid is designed for two-dimensional layouts. It allows you to work with both rows and columns simultaneously, making it ideal for complex page layouts.</p>
-                    
-                    <h2>When to Use Flexbox</h2>
-                    <p>Use Flexbox when you need to align items in a single direction, create navigation bars, center content, or distribute space evenly among items.</p>
-                    
-                    <h2>When to Use CSS Grid</h2>
-                    <p>Use CSS Grid for overall page layouts, creating complex responsive designs, or when you need precise control over both rows and columns.</p>
-                `,
-                category: "CSS",
-                tags: ["CSS", "Layout", "Grid", "Flexbox"],
-                image: "🎨"
-            },
-            {
-                id: 3,
-                title: "Building RESTful APIs with Node.js",
-                author: "Mike Johnson",
-                date: "2025-01-05",
-                excerpt: "Step-by-step guide to creating robust RESTful APIs using Node.js and Express framework.",
-                content: `
-                    <h2>Introduction to RESTful APIs</h2>
-                    <p>REST (Representational State Transfer) is an architectural style for designing networked applications. RESTful APIs are web services that adhere to REST principles.</p>
-                    
-                    <h2>Setting Up Node.js and Express</h2>
-                    <p>First, we'll set up a new Node.js project and install Express, which is a minimal and flexible Node.js web application framework.</p>
-                    
-                    <h2>Creating Routes</h2>
-                    <p>We'll create different routes for handling various HTTP methods (GET, POST, PUT, DELETE) to perform CRUD operations on our resources.</p>
-                    
-                    <h2>Middleware and Error Handling</h2>
-                    <p>Learn how to implement middleware functions for logging, authentication, and error handling to make your API more robust.</p>
-                    
-                    <h2>Testing Your API</h2>
-                    <p>We'll explore different tools and techniques for testing your RESTful API to ensure it works correctly and handles edge cases.</p>
-                `,
-                category: "Node.js",
-                tags: ["Node.js", "API", "Express", "Backend"],
-                image: "🚀"
-            },
-            {
-                id: 4,
-                title: "React Hooks: A Complete Guide",
-                author: "Sarah Wilson",
-                date: "2024-12-28",
-                excerpt: "Master React Hooks with this comprehensive guide covering useState, useEffect, and custom hooks.",
-                content: `
-                    <h2>Introduction to React Hooks</h2>
-                    <p>React Hooks were introduced in React 16.8 as a way to use state and other React features in functional components. They've revolutionized how we write React applications.</p>
-                    
-                    <h2>useState Hook</h2>
-                    <p>The useState hook allows you to add state to functional components. It returns a state variable and a function to update it.</p>
-                    
-                    <h2>useEffect Hook</h2>
-                    <p>useEffect lets you perform side effects in functional components. It serves the same purpose as componentDidMount, componentDidUpdate, and componentWillUnmount combined.</p>
-                    
-                    <h2>Custom Hooks</h2>
-                    <p>Custom hooks allow you to extract component logic into reusable functions. They're a powerful way to share stateful logic between components.</p>
-                    
-                    <h2>Best Practices</h2>
-                    <p>Learn the rules of hooks and best practices for using them effectively in your React applications.</p>
-                `,
-                category: "React",
-                tags: ["React", "Hooks", "JavaScript", "Frontend"],
-                image: "⚛️"
-            }
-        ];
-
-        // Application state
-        let currentPage = 'home';
-        let currentTheme = 'light';
-        let searchQuery = '';
-        let themes = {
-            light: {
-                name: 'Light Blue',
-                icon: 'fas fa-sun',
-                class: ''
-            },
-            dark: {
-                name: 'Dark Mode',
-                icon: 'fas fa-moon',
-                class: 'dark-mode'
-            },
-            blue: {
-                name: 'Ocean Blue',
-                icon: 'fas fa-water',
-                class: 'blue-theme'
-            },
-            green: {
-                name: 'Nature Green',
-                icon: 'fas fa-leaf',
-                class: 'green-theme'
-            }
-        };
-
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPage('home');
-            loadFeaturedPosts();
-        });
-
-        // Page loading functionality
-        function loadPage(page) {
-            showLoading(true);
-            
-            setTimeout(() => {
-                currentPage = page;
-                const mainContent = document.getElementById('main-content');
-                
-                switch(page) {
-                    case 'home':
-                        mainContent.innerHTML = getHomePage();
-                        loadFeaturedPosts();
-                        break;
-                    case 'blog':
-                        mainContent.innerHTML = getBlogPage();
-                        loadBlogPosts();
-                        break;
-                    case 'about':
-                        mainContent.innerHTML = getAboutPage();
-                        break;
-                    case 'contact':
-                        mainContent.innerHTML = getContactPage();
-                        break;
-                    default:
-                        mainContent.innerHTML = getHomePage();
-                }
-                
-                showLoading(false);
-                updateActiveNavLink(page);
-                window.scrollTo(0, 0);
-            }, 500);
+    // --- STATE & DATA ---
+    let blogPosts = [
+        {
+            id: 1,
+            title: "Mastering Modern JavaScript: A Guide for Indian Developers",
+            author: "Priya Sharma",
+            date: "2025-07-28",
+            excerpt: "From startups in Bangalore to MNCs in Gurugram, modern JS is key. Let's explore ES6+ features like Arrow Functions, Destructuring, and Promises.",
+            content: `
+                <h2>The JavaScript Renaissance in India</h2>
+                <p>JavaScript is no longer just a language for simple web animations. In today's Indian tech ecosystem, it powers everything from complex frontend frameworks like React to robust backend systems with Node.js. Mastering its modern features (ES6 and beyond) is essential for any aspiring developer.</p>
+                <h3>Arrow Functions (=>)</h3>
+                <p>A concise syntax for writing function expressions. They are especially useful for inline functions and maintaining the correct <code>this</code> context. For example: <code>const numbers = [1, 2, 3]; const squared = numbers.map(n => n * n);</code></p>
+                <h3>Destructuring and Spread/Rest Operators</h3>
+                <p>Destructuring makes it easy to unpack values from arrays or properties from objects into distinct variables. The spread (<code>...</code>) and rest operators provide powerful ways to work with arrays and function arguments, simplifying code for tasks like merging or cloning data structures.</p>
+                <h3>Promises and Async/Await</h3>
+                <p>Asynchronous operations are everywhere, from fetching data for a food delivery app to processing a payment via UPI. Promises, and the even cleaner <code>async/await</code> syntax, make managing these operations clean and readable, avoiding the infamous 'callback hell'.</p>
+                <h2>Conclusion</h2>
+                <p>Embracing these modern JavaScript features will not only make your code more efficient but also align you with the best practices used in top Indian tech companies.</p>
+            `,
+            category: "JavaScript",
+            tags: ["JavaScript", "ES6", "Programming", "India"],
+            image: "💻",
+            comments: []
+        },
+        {
+            id: 2,
+            title: "Building Scalable Backends with Node.js for the Indian Market",
+            author: "Arjun Singh",
+            date: "2025-07-20",
+            excerpt: "India's digital-first economy demands high-performance backends. Learn how Node.js and Express can help you build fast, scalable APIs for millions of users.",
+            content: `
+                <h2>Why Node.js for India?</h2>
+                <p>With one of the largest internet user bases in the world, applications in India must be built for scale. Node.js's non-blocking, event-driven architecture is perfectly suited for I/O-heavy applications like e-commerce platforms, streaming services, and real-time chat apps that are immensely popular here.</p>
+                <h3>Setting up with Express.js</h3>
+                <p>Express.js is the de-facto standard framework for Node.js. It provides a minimal and flexible set of features for web and mobile applications. Setting up a basic server is incredibly simple, allowing developers to get started quickly.</p>
+                <h3>Connecting to a Database</h3>
+                <p>Whether you choose a SQL database like PostgreSQL or a NoSQL solution like MongoDB, connecting it to your Node.js application is straightforward with libraries like <code>pg</code> or <code>mongoose</code>. We'll explore how to set up a basic data model for a product catalog.</p>
+                <h3>Building RESTful APIs</h3>
+                <p>We will walk through creating standard CRUD (Create, Read, Update, Delete) endpoints. These form the backbone of your application, allowing the frontend to interact with your data securely and efficiently.</p>
+            `,
+            category: "Node.js",
+            tags: ["Node.js", "API", "Backend", "Express"],
+            image: "🚀",
+            comments: []
+        },
+        {
+            id: 3,
+            title: "React for Startups: Lessons from Building a Unicorn in Bengaluru",
+            author: "Ananya Gupta",
+            date: "2025-07-15",
+            excerpt: "React's component-based architecture is a game-changer for fast-paced startups. Discover best practices for state management, hooks, and performance.",
+            content: `
+                <h2>The Startup's Choice: React</h2>
+                <p>In the competitive startup hub of Bengaluru, speed of development and maintainability are critical. React's component-based architecture allows teams to build complex UIs from small, isolated, and reusable pieces of code.</p>
+                <h3>Mastering Hooks: useState and useEffect</h3>
+                <p>Hooks let you use state and other React features without writing a class. <code>useState</code> is for managing local component state, while <code>useEffect</code> is for handling side effects like API calls or subscriptions. Mastering these two is 80% of the battle.</p>
+                <h3>Global State Management</h3>
+                <p>As your app grows, passing props down multiple levels (prop drilling) becomes cumbersome. We'll compare solutions like the built-in Context API for simpler cases and robust libraries like Redux or Zustand for more complex applications, a common challenge for scaling Indian startups.</p>
+                <h3>Performance Optimization</h3>
+                <p>Techniques like code-splitting with <code>React.lazy()</code>, memoization with <code>React.memo()</code>, and using keys correctly in lists are crucial for ensuring your app remains fast and responsive, even on low-end devices prevalent in the Indian market.</p>
+            `,
+            category: "React",
+            tags: ["React", "Hooks", "Frontend", "Startups"],
+            image: "⚛️",
+            comments: []
+        },
+        {
+            id: 4,
+            title: "A Deep Dive into India's Digital Payment Stack",
+            author: "Rohan Mehta",
+            date: "2025-06-30",
+            excerpt: "UPI has revolutionized payments in India. This post explores the technology behind it and how you can integrate payment gateways into your own applications.",
+            content: `
+                <h2>The UPI Revolution</h2>
+                <p>The Unified Payments Interface (UPI) has transformed how India transacts. Built on top of the IMPS infrastructure, it has enabled seamless, real-time, inter-bank payments. It's a prime example of India's world-class digital public infrastructure.</p>
+                <h3>How UPI Works</h3>
+                <p>We'll break down the key players in a UPI transaction: the Payer and Payee PSPs (Payment Service Providers), the NPCI (National Payments Corporation of India), and the remitter/beneficiary banks. Understanding this flow is key to appreciating its genius.</p>
+                <h3>Integrating a Payment Gateway</h3>
+                <p>For most businesses, direct UPI integration is complex. This is where payment gateways like Razorpay, PayU, or Cashfree come in. We will demonstrate a sample integration using a popular gateway's SDK, showing how to initiate a payment and verify its status on your server, a crucial step for any e-commerce business in India.</p>
+                <h3>Security and Compliance</h3>
+                <p>Handling payments means taking security seriously. We'll touch upon essential concepts like checksums (hashes) for verifying data integrity and the importance of handling webhooks securely to confirm transaction status.</p>
+            `,
+            category: "FinTech",
+            tags: ["UPI", "Payments", "FinTech", "India"],
+            image: "💳",
+            comments: []
         }
+    ];
 
-        // Show/hide loading animation
-        function showLoading(show) {
-            const loading = document.getElementById('loading');
-            const mainContent = document.getElementById('main-content');
-            
-            if (show) {
-                loading.style.display = 'block';
-                mainContent.style.display = 'none';
-            } else {
-                loading.style.display = 'none';
-                mainContent.style.display = 'block';
-            }
-        }
+    // --- DOM ELEMENTS (CACHED) ---
+    const mainContent = document.getElementById('main-content');
+    const loadingDiv = document.getElementById('loading');
+    const navMenu = document.getElementById('nav-menu');
+    const hamburger = document.querySelector('.hamburger');
+    const themeSelector = document.getElementById('theme-selector');
+    const backToTopButton = document.getElementById('back-to-top');
+    
+    // --- TEMPLATE GENERATORS ---
+    const getHomePage = () => `
+        <div id="home-page">
+            <section class="hero-section">
+                <h1 class="hero-title">Welcome to TechBharat</h1>
+                <p class="hero-subtitle">Exploring Technology, Innovation, and Code from an Indian Perspective</p>
+                <a href="#" class="cta-button" onclick="loadPage('blog')">Explore Articles</a>
+            </section>
+            <h2 class="page-title" style="text-align:center; margin-bottom: 2rem;">Featured Posts</h2>
+            <section class="blog-posts" id="featured-posts"></section>
+        </div>`;
+    
+    const getBlogPage = () => `
+        <div class="page-content">
+            <div class="breadcrumb"><a href="#" onclick="loadPage('home')">Home</a> > Blog</div>
+            <h1 class="page-title">All Blog Posts</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by title, tag, or content...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div id="category-filter" class="category-filter"></div>
+            <div class="blog-posts" id="all-posts"></div>
+            <div class="no-results" id="no-results" style="display: none;">
+                <p>No articles found. Try a different search or filter.</p>
+            </div>
+        </div>`;
 
-        // Update active navigation link
-        function updateActiveNavLink(page) {
-            const navLinks = document.querySelectorAll('.nav-menu a');
-            navLinks.forEach(link => {
-                link.style.opacity = '0.8';
-            });
-            
-            // Find and highlight current page link
-            navLinks.forEach(link => {
-                if (link.textContent.toLowerCase() === page.toLowerCase()) {
-                    link.style.opacity = '1';
-                    link.style.fontWeight = 'bold';
-                }
-            });
-        }
-
-        // Page templates
-        function getHomePage() {
-            return `
-                <div id="home-page">
-                    <section class="hero-section">
-                        <h1 class="hero-title">Welcome to TechBlog</h1>
-                        <p class="hero-subtitle">Discover the latest trends in technology, programming, and digital innovation</p>
-                        <a href="#" class="cta-button" onclick="loadPage('blog')">Explore Articles</a>
-                    </section>
-                    <section class="blog-posts" id="featured-posts">
-                        <!-- Featured posts will be loaded here -->
-                    </section>
+    const getAboutPage = () => `
+        <div class="page-content">
+            <div class="breadcrumb"><a href="#" onclick="loadPage('home')">Home</a> > About</div>
+            <h1 class="page-title">About TechBharat</h1>
+            <div class="about-content">
+                <div class="about-image"><i class="fas fa-users"></i></div>
+                <div>
+                    <p>Welcome to <strong>TechBharat</strong>, your premier destination for technology insights, programming tutorials, and digital innovation stories, all with a distinct Indian flavor.</p>
+                    <p>Founded in 2025, we are dedicated to providing high-quality content that helps developers, tech enthusiasts, and business leaders in India and beyond to stay ahead of the curve.</p>
+                    <p>Our team of experienced writers and industry experts from across India cover topics like:</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem;">
+                        <li>Web & Mobile Development</li>
+                        <li>Cloud Computing & DevOps in the Indian context</li>
+                        <li>The booming Indian FinTech Ecosystem</li>
+                        <li>AI, ML, and Data Science case studies from India</li>
+                        <li>Startup stories from hubs like Bengaluru, Pune, and Hyderabad</li>
+                    </ul>
                 </div>
-            `;
-        }
+            </div>
+        </div>`;
 
-        function getBlogPage() {
-            return `
-                <div class="page-content">
-                    <div class="breadcrumb">
-                        <a href="#" onclick="loadPage('home')">Home</a> > Blog
-                    </div>
-                    <h1 class="page-title">All Blog Posts</h1>
-                    
-                    <div class="search-container">
-                        <input type="text" class="search-input" placeholder="Search articles..." onkeyup="searchPosts(this.value)">
-                        <button class="search-btn"><i class="fas fa-search"></i></button>
-                    </div>
-                    
-                    <div class="blog-posts" id="all-posts">
-                        <!-- All posts will be loaded here -->
-                    </div>
-                    
-                    <div class="no-results" id="no-results" style="display: none;">
-                        <p>No articles found matching your search.</p>
-                    </div>
+    const getContactPage = () => `
+        <div class="page-content">
+            <div class="breadcrumb"><a href="#" onclick="loadPage('home')">Home</a> > Contact</div>
+            <h1 class="page-title">Get In Touch</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: #666;">Have a question, suggestion, or want to collaborate? We'd love to hear from you!</p>
+            <form class="contact-form" onsubmit="submitContactForm(event)">
+                <div class="form-group">
+                    <label for="name">Name *</label>
+                    <input type="text" id="name" name="name" required>
                 </div>
-            `;
-        }
-
-        function getAboutPage() {
-            return `
-                <div class="page-content">
-                    <div class="breadcrumb">
-                        <a href="#" onclick="loadPage('home')">Home</a> > About
-                    </div>
-                    <h1 class="page-title">About TechBlog</h1>
-                    
-                    <div class="about-content">
-                        <div class="about-image">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div>
-                            <p>Welcome to TechBlog, your premier destination for cutting-edge technology insights, programming tutorials, and digital innovation stories.</p>
-                            
-                            <p>Founded in 2025, we've been committed to providing high-quality content that helps developers, tech enthusiasts, and digital professionals stay ahead of the curve in our rapidly evolving technological landscape.</p>
-                            
-                            <p>Our team of experienced writers and industry experts covers a wide range of topics including:</p>
-                            <ul style="margin: 1rem 0; padding-left: 2rem;">
-                                <li>Web Development (Frontend & Backend)</li>
-                                <li>Mobile App Development</li>
-                                <li>Cloud Computing & DevOps</li>
-                                <li>Artificial Intelligence & Machine Learning</li>
-                                <li>Cybersecurity</li>
-                                <li>Emerging Technologies</li>
-                            </ul>
-                            
-                            <p>Whether you're a beginner looking to learn the fundamentals or an experienced developer seeking advanced techniques, TechBlog has something for everyone.</p>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-            `;
-        }
-
-        function getContactPage() {
-            return `
-                <div class="page-content">
-                    <div class="breadcrumb">
-                        <a href="#" onclick="loadPage('home')">Home</a> > Contact
-                    </div>
-                    <h1 class="page-title">Contact Us</h1>
-                    
-                    <p style="text-align: center; margin-bottom: 2rem; color: #666;">
-                        Have a question, suggestion, or want to contribute? We'd love to hear from you!
-                    </p>
-                    
-                    <form class="contact-form" onsubmit="submitContactForm(event)">
-                        <div class="form-group">
-                            <label for="name">Name *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="subject">Subject *</label>
-                            <input type="text" id="subject" name="subject" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="message">Message *</label>
-                            <textarea id="message" name="message" rows="6" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="submit-btn">
-                            <i class="fas fa-paper-plane"></i> Send Message
-                        </button>
-                    </form>
+                <div class="form-group">
+                    <label for="subject">Subject *</label>
+                    <input type="text" id="subject" name="subject" required>
                 </div>
-            `;
-        }
+                <div class="form-group">
+                    <label for="message">Message *</label>
+                    <textarea id="message" name="message" rows="6" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+            </form>
+        </div>`;
 
-        // Load featured posts on home page
-        function loadFeaturedPosts() {
-            const container = document.getElementById('featured-posts');
-            if (!container) return;
+    const createPostCard = (post) => {
+        const readingTime = Math.ceil(post.content.split(' ').length / 200);
+        const tagsHTML = post.tags.map(tag => `<span class="tag" onclick="event.stopPropagation(); filterByTag('${tag}')">${tag}</span>`).join('');
+        return `
+            <article class="blog-card" onclick="loadBlogPost(${post.id})">
+                <div class="blog-image">${post.image}</div>
+                <div class="blog-content">
+                    <h3 class="blog-title">${post.title}</h3>
+                    <div class="blog-meta">
+                        <span><i class="fas fa-user"></i> ${post.author}</span> |
+                        <span><i class="fas fa-calendar"></i> ${new Date(post.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        <span class="reading-time"><i class="fas fa-clock"></i> ${readingTime} min read</span>
+                    </div>
+                    <div class="blog-tags">${tagsHTML}</div>
+                    <p class="blog-excerpt">${post.excerpt}</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); loadBlogPost(${post.id})">
+                        Read More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </article>`;
+    };
+    
+    const renderBlogPostDetail = (post) => {
+        const readingTime = Math.ceil(post.content.split(' ').length / 200);
+        const commentsHTML = post.comments.map(c => `
+            <div class="comment">
+                <p class="comment-author">${c.author} <span class="comment-date">${new Date(c.date).toLocaleString('en-IN')}</span></p>
+                <p class="comment-body">${c.text}</p>
+            </div>`).join('') || '<p>No comments yet. Be the first to comment!</p>';
             
-            const featuredPosts = blogPosts.slice(0, 3); // Show first 3 posts
-            container.innerHTML = featuredPosts.map(post => createPostCard(post)).join('');
-        }
+        const encodedTitle = encodeURIComponent(post.title);
+        const postUrl = encodeURIComponent(window.location.href);
 
-        // Load all blog posts
-        function loadBlogPosts() {
-            const container = document.getElementById('all-posts');
-            if (!container) return;
-            
-            container.innerHTML = blogPosts.map(post => createPostCard(post)).join('');
-        }
-
-        // Create blog post card HTML
-        function createPostCard(post) {
-            return `
-                <article class="blog-card">
-                    <div class="blog-image">
-                        ${post.image}
-                    </div>
-                    <div class="blog-content">
-                        <h3 class="blog-title">${post.title}</h3>
-                        <div class="blog-meta">
-                            <i class="fas fa-user"></i> ${post.author} | 
-                            <i class="fas fa-calendar"></i> ${formatDate(post.date)} |
-                            <i class="fas fa-tag"></i> ${post.category}
-                        </div>
-                        <p class="blog-excerpt">${post.excerpt}</p>
-                        <a href="#" class="read-more" onclick="loadBlogPost(${post.id})">
-                            Read More <i class="fas fa-arrow-right"></i>
-                        </a>
+        mainContent.innerHTML = `
+            <div class="page-content">
+                <div class="breadcrumb">
+                    <a href="#" onclick="loadPage('home')">Home</a> > 
+                    <a href="#" onclick="loadPage('blog')">Blog</a> > 
+                    ${post.title}
+                </div>
+                <article class="post-header">
+                    <h1 class="page-title">${post.title}</h1>
+                    <div class="post-date">
+                        <span><i class="fas fa-user"></i> ${post.author}</span> | 
+                        <span><i class="fas fa-calendar"></i> ${new Date(post.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span> |
+                        <span><i class="fas fa-tag"></i> ${post.category}</span> |
+                        <span class="reading-time"><i class="fas fa-clock"></i> ${readingTime} min read</span>
                     </div>
                 </article>
-            `;
-        }
+                <div class="post-content">${post.content}</div>
 
-        // Load individual blog post
-        function loadBlogPost(postId) {
-            const post = blogPosts.find(p => p.id === postId);
-            if (!post) return;
-            
-            showLoading(true);
-            
-            setTimeout(() => {
-                const mainContent = document.getElementById('main-content');
-                mainContent.innerHTML = `
-                    <div class="page-content">
-                        <div class="breadcrumb">
-                            <a href="#" onclick="loadPage('home')">Home</a> > 
-                            <a href="#" onclick="loadPage('blog')">Blog</a> > 
-                            ${post.title}
+                <div class="social-share">
+                    <h3>Share this post:</h3>
+                    <a href="https://twitter.com/intent/tweet?text=${encodedTitle}&url=${postUrl}" target="_blank" title="Share on Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url=${postUrl}&title=${encodedTitle}" target="_blank" title="Share on LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://api.whatsapp.com/send?text=${encodedTitle} ${postUrl}" target="_blank" title="Share on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+
+                <div class="comments-section">
+                    <h3>Comments (${post.comments.length})</h3>
+                    <div id="comments-list">${commentsHTML}</div>
+                    <form id="comment-form" onsubmit="addComment(event, ${post.id})" style="margin-top: 2rem;">
+                        <h4>Leave a Comment</h4>
+                        <div class="form-group">
+                            <input type="text" id="comment-author" placeholder="Your Name" required>
                         </div>
-                        
-                        <article class="post-header">
-                            <h1 class="page-title">${post.title}</h1>
-                            <div class="post-date">
-                                <i class="fas fa-user"></i> ${post.author} | 
-                                <i class="fas fa-calendar"></i> ${formatDate(post.date)} |
-                                <i class="fas fa-tag"></i> ${post.category}
-                            </div>
-                        </article>
-                        
-                        <div class="post-content">
-                            ${post.content}
+                        <div class="form-group">
+                            <textarea id="comment-text" rows="4" placeholder="Your Comment" required></textarea>
                         </div>
-                        
-                        <div style="margin-top: 3rem; text-align: center;">
-                            <a href="#" class="cta-button" onclick="loadPage('blog')">
-                                <i class="fas fa-arrow-left"></i> Back to Blog
-                            </a>
-                        </div>
-                    </div>
-                `;
-                
-                showLoading(false);
-                window.scrollTo(0, 0);
-            }, 500);
-        }
+                        <button type="submit" class="submit-btn">Post Comment</button>
+                    </form>
+                </div>
 
-        // Search functionality
-        function searchPosts(query) {
-            searchQuery = query.toLowerCase();
-            const container = document.getElementById('all-posts');
-            const noResults = document.getElementById('no-results');
-            
-            if (!container || !noResults) return;
-            
-            if (searchQuery === '') {
-                loadBlogPosts();
-                noResults.style.display = 'none';
-                return;
+                <div style="margin-top: 3rem; text-align: center;">
+                    <a href="#" class="cta-button" onclick="loadPage('blog')"><i class="fas fa-arrow-left"></i> Back to Blog</a>
+                </div>
+            </div>`;
+    };
+    
+    // --- RENDER FUNCTIONS ---
+    const showLoading = (show) => {
+        loadingDiv.style.display = show ? 'block' : 'none';
+        mainContent.style.display = show ? 'none' : 'block';
+    };
+
+    const renderAllPosts = (postsToRender = blogPosts) => {
+        const container = document.getElementById('all-posts');
+        const noResultsDiv = document.getElementById('no-results');
+        if (!container) return;
+
+        if (postsToRender.length === 0) {
+            container.innerHTML = '';
+            noResultsDiv.style.display = 'block';
+        } else {
+            container.innerHTML = postsToRender.map(createPostCard).join('');
+            noResultsDiv.style.display = 'none';
+        }
+    };
+    
+    const renderCategoryFilters = () => {
+        const filterContainer = document.getElementById('category-filter');
+        if (!filterContainer) return;
+        
+        const categories = ['All', ...new Set(blogPosts.map(p => p.category))];
+        filterContainer.innerHTML = categories.map(cat => 
+            `<button class="${cat === 'All' ? 'active' : ''}" onclick="filterByCategory('${cat}')">${cat}</button>`
+        ).join('');
+    };
+
+    // --- EVENT HANDLERS & LOGIC ---
+    const loadPage = (page) => {
+        showLoading(true);
+        // Fade out current content
+        mainContent.style.opacity = '0';
+        mainContent.style.transform = 'translateY(10px)';
+
+        setTimeout(() => {
+            switch(page) {
+                case 'home':
+                    mainContent.innerHTML = getHomePage();
+                    const featured = blogPosts.slice(0, 3);
+                    document.getElementById('featured-posts').innerHTML = featured.map(createPostCard).join('');
+                    break;
+                case 'blog':
+                    mainContent.innerHTML = getBlogPage();
+                    renderCategoryFilters();
+                    renderAllPosts();
+                    document.getElementById('search-input').addEventListener('keyup', (e) => searchPosts(e.target.value));
+                    break;
+                case 'about':
+                    mainContent.innerHTML = getAboutPage();
+                    break;
+                case 'contact':
+                    mainContent.innerHTML = getContactPage();
+                    break;
+                default:
+                    mainContent.innerHTML = getHomePage();
             }
             
-            const filteredPosts = blogPosts.filter(post => 
-                post.title.toLowerCase().includes(searchQuery) ||
-                post.excerpt.toLowerCase().includes(searchQuery) ||
-                post.category.toLowerCase().includes(searchQuery) ||
-                post.tags.some(tag => tag.toLowerCase().includes(searchQuery))
-            );
-            
-            if (filteredPosts.length === 0) {
-                container.innerHTML = '';
-                noResults.style.display = 'block';
-            } else {
-                container.innerHTML = filteredPosts.map(post => createPostCard(post)).join('');
-                noResults.style.display = 'none';
-            }
-        }
+            showLoading(false);
+            updateActiveNavLink(page);
+            window.scrollTo(0, 0);
 
-        // Contact form submission
-        function submitContactForm(event) {
-            event.preventDefault();
-            
-            const formData = new FormData(event.target);
-            const data = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                subject: formData.get('subject'),
-                message: formData.get('message')
-            };
-            
-            // Simulate form submission
-            const submitBtn = event.target.querySelector('.submit-btn');
-            const originalText = submitBtn.innerHTML;
-            
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitBtn.disabled = true;
-            
-            setTimeout(() => {
-                alert('Thank you for your message! We\'ll get back to you soon.');
-                event.target.reset();
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 2000);
-        }
+            // Fade in new content
+            mainContent.style.opacity = '1';
+            mainContent.style.transform = 'translateY(0)';
+        }, 400);
+    };
 
-        // Enhanced theme functionality
-        function toggleTheme() {
-            const themeKeys = Object.keys(themes);
-            const currentIndex = themeKeys.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themeKeys.length;
-            const nextTheme = themeKeys[nextIndex];
-            setTheme(nextTheme);
-        }
+    const loadBlogPost = (postId) => {
+        const post = blogPosts.find(p => p.id === postId);
+        if (!post) return;
+        
+        showLoading(true);
+        mainContent.style.opacity = '0';
 
-        function setTheme(themeName) {
-            const body = document.body;
-            const themeToggle = document.querySelector('.theme-toggle i');
-            
-            // Remove all theme classes
-            Object.values(themes).forEach(theme => {
-                if (theme.class) {
-                    body.classList.remove(theme.class);
-                }
-            });
-            
-            // Apply new theme
-            currentTheme = themeName;
-            const selectedTheme = themes[themeName];
-            
-            if (selectedTheme.class) {
-                body.classList.add(selectedTheme.class);
-            }
-            
-            // Update theme toggle icon
-            if (themeToggle) {
-                themeToggle.className = selectedTheme.icon;
-            }
-            
-            // Save theme preference
-            localStorage.setItem('theme', themeName);
-            
-            // Close dropdown
-            const dropdown = document.getElementById('theme-dropdown');
-            if (dropdown) {
-                dropdown.classList.remove('show');
-            }
-            
-            // Show theme change notification
-            showThemeNotification(selectedTheme.name);
-        }
+        setTimeout(() => {
+            renderBlogPostDetail(post);
+            showLoading(false);
+            updateActiveNavLink(''); // No specific nav link is active
+            window.scrollTo(0, 0);
+            mainContent.style.opacity = '1';
+        }, 400);
+    };
 
-        function toggleThemeDropdown() {
-            const dropdown = document.getElementById('theme-dropdown');
-            dropdown.classList.toggle('show');
-        }
-
-        function showThemeNotification(themeName) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-                color: white;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-                z-index: 10000;
-                font-weight: bold;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            `;
-            notification.innerHTML = `
-                <i class="fas fa-palette"></i> 
-                Theme changed to ${themeName}
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // Animate in
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        // Mobile menu toggle
-        function toggleMenu() {
-            const navMenu = document.getElementById('nav-menu');
-            const hamburger = document.querySelector('.hamburger');
-            
-            navMenu.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        }
-
-        // Utility functions
-        function formatDate(dateString) {
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            return new Date(dateString).toLocaleDateString(undefined, options);
-        }
-
-        // Initialize theme from localStorage
-        function initializeTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (themes[savedTheme]) {
-                setTheme(savedTheme);
-            }
-        }
-
-        // Smooth scrolling for anchor links
-        function smoothScroll(target) {
-            document.querySelector(target).scrollIntoView({
-                behavior: 'smooth'
-            });
-        }
-
-        // Add scroll-to-top functionality
-        window.addEventListener('scroll', function() {
-            const scrollButton = document.getElementById('scroll-to-top');
-            if (window.pageYOffset > 300) {
-                if (scrollButton) scrollButton.style.display = 'block';
-            } else {
-                if (scrollButton) scrollButton.style.display = 'none';
+    const updateActiveNavLink = (page) => {
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.classList.remove('active-link');
+            if (link.textContent.toLowerCase() === page.toLowerCase()) {
+                link.classList.add('active-link');
             }
         });
+    };
+    
+    const filterByCategory = (category) => {
+        document.querySelectorAll('.category-filter button').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.category-filter button[onclick="filterByCategory('${category}')"]`).classList.add('active');
+        
+        if (category === 'All') {
+            renderAllPosts();
+        } else {
+            const filtered = blogPosts.filter(p => p.category === category);
+            renderAllPosts(filtered);
+        }
+        document.getElementById('search-input').value = '';
+    };
+    
+    const filterByTag = (tag) => {
+        loadPage('blog');
+        setTimeout(() => {
+             document.getElementById('search-input').value = tag;
+             searchPosts(tag);
+        }, 500); // Wait for blog page to load
+    };
+
+    const searchPosts = (query) => {
+        const lowerQuery = query.toLowerCase();
+        const filtered = blogPosts.filter(post => 
+            post.title.toLowerCase().includes(lowerQuery) ||
+            post.excerpt.toLowerCase().includes(lowerQuery) ||
+            post.content.toLowerCase().includes(lowerQuery) ||
+            post.category.toLowerCase().includes(lowerQuery) ||
+            post.tags.some(tag => tag.toLowerCase().includes(lowerQuery))
+        );
+        renderAllPosts(filtered);
+    };
+
+    const submitContactForm = (event) => {
+        event.preventDefault();
+        const submitBtn = event.target.querySelector('.submit-btn');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitBtn.disabled = true;
+
+        setTimeout(() => {
+            alert('Thank you for your message! We\'ll get back to you soon.');
+            event.target.reset();
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+            submitBtn.disabled = false;
+        }, 1500);
+    };
+
+    const addComment = (event, postId) => {
+        event.preventDefault();
+        const post = blogPosts.find(p => p.id === postId);
+        const author = document.getElementById('comment-author').value;
+        const text = document.getElementById('comment-text').value;
+
+        if (post && author && text) {
+            post.comments.push({ author, text, date: new Date() });
+            renderBlogPostDetail(post);
+        }
+    };
+    
+    const setTheme = (themeName) => {
+        document.body.className = ''; // Clear all classes
+        if (themeName !== 'light') {
+            document.body.classList.add(`${themeName}-mode`);
+        }
+        localStorage.setItem('theme', themeName);
+        themeSelector.value = themeName;
+    };
+
+    const toggleMenu = () => {
+        navMenu.classList.toggle('active');
+        hamburger.classList.toggle('active');
+    };
+
+    // --- INITIALIZATION ---
+    const init = () => {
+        // Set dynamic year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Load initial page and theme
+        loadPage('home');
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme);
+
+        // Event listeners
+        themeSelector.addEventListener('change', (e) => setTheme(e.target.value));
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => window.scrollTo(0, 0));
 
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const navMenu = document.getElementById('nav-menu');
-            const hamburger = document.querySelector('.hamburger');
-            const themeDropdown = document.getElementById('theme-dropdown');
-            const themeSelector = document.querySelector('.theme-selector');
-            
-            if (!navMenu.contains(event.target) && !hamburger.contains(event.target)) {
-                navMenu.classList.remove('active');
-                hamburger.classList.remove('active');
-            }
-            
-            // Close theme dropdown when clicking outside
-            if (themeDropdown && !themeSelector.contains(event.target)) {
-                themeDropdown.classList.remove('show');
+        document.addEventListener('click', (event) => {
+            if (navMenu.classList.contains('active') && !navMenu.contains(event.target) && !hamburger.contains(event.target)) {
+                toggleMenu();
             }
         });
 
-        // Keyboard navigation support
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                const navMenu = document.getElementById('nav-menu');
-                const hamburger = document.querySelector('.hamburger');
-                const themeDropdown = document.getElementById('theme-dropdown');
-                
-                navMenu.classList.remove('active');
-                hamburger.classList.remove('active');
-                
-                if (themeDropdown) {
-                    themeDropdown.classList.remove('show');
-                }
-            }
-        });
+        console.log('TechBharat initialized successfully! 🇮🇳');
+    };
 
-        // Initialize theme on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            // Initialize theme from localStorage
-            initializeTheme();
-        });
-
-        // Add animation on scroll (Intersection Observer)
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver(function(entries) {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe blog cards for animation
-        function observeElements() {
-            const blogCards = document.querySelectorAll('.blog-card');
-            blogCards.forEach(card => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                observer.observe(card);
-            });
-        }
-
-        // Call observe function after loading posts
-        function loadFeaturedPosts() {
-            const container = document.getElementById('featured-posts');
-            if (!container) return;
-            
-            const featuredPosts = blogPosts.slice(0, 3);
-            container.innerHTML = featuredPosts.map(post => createPostCard(post)).join('');
-            
-            // Add scroll animation
-            setTimeout(observeElements, 100);
-        }
-
-        function loadBlogPosts() {
-            const container = document.getElementById('all-posts');
-            if (!container) return;
-            
-            container.innerHTML = blogPosts.map(post => createPostCard(post)).join('');
-            
-            // Add scroll animation
-            setTimeout(observeElements, 100);
-        }
-
-        // Add error handling for images
-        function handleImageError(img) {
-            img.style.display = 'none';
-            img.nextElementSibling.style.display = 'flex';
-        }
-
-        // Add reading time calculation
-        function calculateReadingTime(content) {
-            const wordsPerMinute = 200;
-            const words = content.split(' ').length;
-            const minutes = Math.ceil(words / wordsPerMinute);
-            return minutes;
-        }
-
-        // Performance optimization: Debounce search
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        // Apply debounce to search
-        const debouncedSearch = debounce(searchPosts, 300);
-
-        // Update search input to use debounced function
-        function setupSearch() {
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput) {
-                searchInput.addEventListener('input', (e) => debouncedSearch(e.target.value));
-            }
-        }
-
-        // Call setup functions when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            loadPage('home');
-            loadFeaturedPosts();
-            
-            // Setup search after a delay to ensure elements exist
-            setTimeout(setupSearch, 1000);
-        });
-
-        // Add page transition effects
-        function addPageTransition() {
-            const mainContent = document.getElementById('main-content');
-            mainContent.style.opacity = '0';
-            mainContent.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                mainContent.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-                mainContent.style.opacity = '1';
-                mainContent.style.transform = 'translateY(0)';
-            }, 100);
-        }
-
-        // Enhanced page loading with transitions
-        function loadPageWithTransition(page) {
-            const mainContent = document.getElementById('main-content');
-            
-            // Fade out
-            mainContent.style.opacity = '0';
-            mainContent.style.transform = 'translateY(-20px)';
-            
-            setTimeout(() => {
-                loadPage(page);
-                
-                // Fade in
-                setTimeout(() => {
-                    mainContent.style.opacity = '1';
-                    mainContent.style.transform = 'translateY(0)';
-                }, 100);
-            }, 300);
-        }
-
-        // Add accessibility improvements
-        function improveAccessibility() {
-            // Add skip link
-            const skipLink = document.createElement('a');
-            skipLink.href = '#main-content';
-            skipLink.textContent = 'Skip to main content';
-            skipLink.className = 'skip-link';
-            skipLink.style.cssText = `
-                position: absolute;
-                top: -40px;
-                left: 6px;
-                background: #000;
-                color: #fff;
-                padding: 8px;
-                text-decoration: none;
-                z-index: 1000;
-                border-radius: 4px;
-            `;
-            
-            skipLink.addEventListener('focus', () => {
-                skipLink.style.top = '6px';
-            });
-            
-            skipLink.addEventListener('blur', () => {
-                skipLink.style.top = '-40px';
-            });
-            
-            document.body.insertBefore(skipLink, document.body.firstChild);
-            
-            // Add ARIA labels and roles
-            const nav = document.querySelector('nav');
-            if (nav) nav.setAttribute('role', 'navigation');
-            
-            const main = document.querySelector('main');
-            if (main) main.setAttribute('role', 'main');
-            
-            const footer = document.querySelector('footer');
-            if (footer) footer.setAttribute('role', 'contentinfo');
-        }
-
-        // Initialize accessibility improvements
-        document.addEventListener('DOMContentLoaded', improveAccessibility);
-
-        // Add print styles optimization
-        function optimizeForPrint() {
-            const printStyles = document.createElement('style');
-            printStyles.textContent = `
-                @media print {
-                    .header, .footer, .hamburger, .theme-toggle, .search-container {
-                        display: none !important;
-                    }
-                    
-                    .page-content {
-                        box-shadow: none !important;
-                        margin: 0 !important;
-                        padding: 0 !important;
-                    }
-                    
-                    .blog-card {
-                        break-inside: avoid;
-                        box-shadow: none !important;
-                        border: 1px solid #ddd;
-                        margin-bottom: 1rem;
-                    }
-                    
-                    a {
-                        color: #000 !important;
-                        text-decoration: underline !important;
-                    }
-                }
-            `;
-            document.head.appendChild(printStyles);
-        }
-
-        // Initialize print optimization
-        document.addEventListener('DOMContentLoaded', optimizeForPrint);
-
-        console.log('TechBlog initialized successfully! 🚀');
+    document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
